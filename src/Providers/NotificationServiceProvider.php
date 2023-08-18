@@ -15,6 +15,9 @@ class NotificationServiceProvider extends ServiceProvider
         ], 'notification-config');
     
         $this->mergeConfigFrom(__DIR__.'/notification.php', 'notification');
+    
+        $this->mergeConfigFrom(__DIR__.'/notificationContent.php', 'notificationContent');
+        
     }
 
     public function register()
