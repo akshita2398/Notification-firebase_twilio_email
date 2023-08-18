@@ -14,11 +14,13 @@
             "email": "mmakshita2398@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "keywords": ["laravel", "firebase", "twilio", "email notification", "notification", "package"],
     "homepage": "https://github.com/akshita2398/Notification-firebase_twilio_email",
     "require": {
         "php": "^7.3",
-        "illuminate/support": "^8.0"
+        "illuminate/support": "^8.0",
+        "laravel/framework": "^8.0",
+        "illuminate/notifications": "^8.0"
     }
 }
