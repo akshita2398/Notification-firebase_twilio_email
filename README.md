@@ -68,6 +68,7 @@ $action = 'login';  // data defined in the notification content file
 $extra_data = [
     'user_name' => 'akshita',
     'full_name' => 'Akshita Manlgik',
+    'otp' => '1234',
 ];
 $result = Notification::sendNotification($recipientData, $action, $extra_data = null)
 if ($result) {
@@ -92,17 +93,44 @@ $result = Notification::sendFirebaseMessage($recipient, $content, $extra_data = 
 $recipient = '+1234567890';
 $message = 'Hello from Twilio SMS!';
 Notification::sendTwilioSMS($recipient, $message);
+Notification::sendNexmoSMS($recipient, $message); 
+
+
 
 // Send an email notification
 $recipient = 'user@example.com';
 $subject = 'Important Update';
 $message = 'Hello from Email Notification!';
 Notification::sendEmail($recipient, $subject, $message);
+
 ```
 
 ## Configuration
 
 Configure your notification options by modifying the `config/notification.php` file in your Laravel app. Customize settings such as API credentials, sender information, and more to fit your needs.
+
+```env veriable required
+    ... 
+
+    FIREBASE_SERVER_KEY
+
+    NOTIFICATION_MESSAGE_DRIVER // twilio or nexmo
+    TWILIO_ACCOUNT_SID
+    TWILIO_AUTH_TOKEN
+    TWILIO_SERVICE_ID
+    NEXMO_API_KEY
+    NEXMO_API_SECRET
+    NEXMO_FROM
+
+    MAIL_MAILER
+    MAIL_HOST
+    MAIL_USERNAME
+    MAIL_PASSWORD
+    MAIL_FROM_NAME
+
+    ... 
+
+```
 
 ## Content_Configuration
 
@@ -115,9 +143,8 @@ return [
         'title' => 'title',
         'body' => 'body',
         'click_action' => '',
-        'twilio_message' => 'false',
-        'twilio_message_title' => 'twilio_message_title',
-        'twilio_message_body' => 'twilio_message_body',
+        'sms_message' => 'false',
+        'sms_message_body' => 'sms_message_body',
         'email' => 'false',
         'email_title' => 'email_title',
         'email_body' => 'email_body'
@@ -127,9 +154,8 @@ return [
         'title' => 'Login Successful',
         'body' => '{{full_name}}, you have logged in successfully.',
         'click_action' => '',
-        'message' => 'false',
-        'message_title' => 'Login Successful Message',
-        'message_body' => '{{full_name}}, you have logged in successfully.',
+        'sms_message' => 'true',
+        'sms_message_body' => '{{full_name}}, you have logged in successfully.',
         'email' => 'false',
         'email_title' => 'Login Successful Email Subject',
         'email_body' => '{{full_name}}, you have logged in successfully.'
