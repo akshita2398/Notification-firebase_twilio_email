@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/akshita2398/notification-firebase-twilio-email-package"><strong>GitHub Repository »</strong></a>
+    <a href="https://github.com/akshita2398/Notification-firebase_twilio_email"><strong>GitHub Repository »</strong></a>
 </p>
 
 ## Table of Contents
