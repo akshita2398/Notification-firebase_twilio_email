@@ -18,7 +18,7 @@ class NotificationServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/notificationContent.php', 'notificationContent');
 
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        // $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
     }
 
     public function register()
