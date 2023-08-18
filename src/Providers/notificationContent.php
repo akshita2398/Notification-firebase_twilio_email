@@ -6,9 +6,9 @@ return [
         'title' => 'title',
         'body' => 'body',
         'click_action' => '',
-        'message' => 'false',
-        'message_title' => 'message_title',
-        'message_body' => 'message_body',
+        'twilio_message' => 'false',
+        'twilio_message_title' => 'twilio_message_title',
+        'twilio_message_body' => 'twilio_message_body',
         'email' => 'false',
         'email_title' => 'email_title',
         'email_body' => 'email_body'

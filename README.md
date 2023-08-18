@@ -15,6 +15,7 @@
 -   [Installation](#installation)
 -   [Usage](#usage)
 -   [Configuration](#configuration)
+-   [Content_Configuration](#Content_Configuration)
 -   [Contributing](#contributing)
 -   [License](#license)
 
@@ -44,7 +45,7 @@ To start using the **Notification Firebase Twilio Email Package**, follow these 
 ```php
 'providers' => [
     // ...
-    
+
     Akshita\NotificationFirebaseTwilioEmailPackage\Providers\NotificationServiceProvider::class,
 ],
 ```
@@ -59,15 +60,32 @@ use Akshita\NotificationFirebaseTwilioEmailPackage\Notification;
 // Test this package by
 Notification::test();
 
-// Send a Firebase Cloud Messaging notification
-$recipient = 'user@example.com';
-$message = 'Hello from Firebase Cloud Messaging!';
-$result = Notification::sendFirebaseMessage($recipient, $message);
+
+// Send all notification by one function based on Content_Configuration
+$recipient = ['FirebaseDeviceToken']; // one or more according to the need 
+$action = 'login';  // data defined in the notification content file 
+//veriables you want to replace
+$extra_data = [
+    'user_name' => 'akshita',
+    'full_name' => 'Akshita Manlgik',
+];
+$result = Notification::sendNotification($recipientData, $action, $extra_data = null)
 if ($result) {
     // Notification sent successfully.
 } else {
     // Notification sending failed.
 }
+
+
+// Send a Firebase Cloud Messaging notification
+$recipient = ['FirebaseDeviceToken'];
+$data = [
+        "title" => $content['title'],
+        "body" => $content['body'],
+        "click_action" => $content['click_action'],
+    ];
+$result = Notification::sendFirebaseMessage($recipient, $content, $extra_data = null );
+
 
 
 // Send a Twilio SMS notification
@@ -85,6 +103,42 @@ Notification::sendEmail($recipient, $subject, $message);
 ## Configuration
 
 Configure your notification options by modifying the `config/notification.php` file in your Laravel app. Customize settings such as API credentials, sender information, and more to fit your needs.
+
+## Content_Configuration
+
+Configure your notification options by modifying the `config/notificationContent.php` file in your Laravel app. Customize settings such as witch notification to send, its content, and more to fit your needs.
+
+```php
+return [
+    'action' => [
+        'push_notification' => 'true',
+        'title' => 'title',
+        'body' => 'body',
+        'click_action' => '',
+        'twilio_message' => 'false',
+        'twilio_message_title' => 'twilio_message_title',
+        'twilio_message_body' => 'twilio_message_body',
+        'email' => 'false',
+        'email_title' => 'email_title',
+        'email_body' => 'email_body'
+    ],
+      'login' => [
+        'push_notification' => 'true',
+        'title' => 'Login Successful',
+        'body' => '{{full_name}}, you have logged in successfully.',
+        'click_action' => '',
+        'message' => 'false',
+        'message_title' => 'Login Successful Message',
+        'message_body' => '{{full_name}}, you have logged in successfully.',
+        'email' => 'false',
+        'email_title' => 'Login Successful Email Subject',
+        'email_body' => '{{full_name}}, you have logged in successfully.'
+    ],
+
+    ....
+];
+
+```
 
 ## Contributing
 

@@ -1,5 +1,6 @@
 {
     "name": "akshita/notification-firebase-twilio-email-package",
+    "version": "1.0.0",
     "description": "send notification to users by email and twilio SMS and push notification by firebase",
     "type": "library",
     "license": "MIT",
