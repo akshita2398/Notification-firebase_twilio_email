@@ -1,64 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Notification Firebase Twilio Email Package
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+    Simplify and streamline sending notifications through Firebase Cloud Messaging, Twilio SMS, and Email.
 </p>
 
-## About Laravel
+<p align="center">
+    <a href="https://github.com/akshita2398/notification-firebase-twilio-email-package"><strong>GitHub Repository »</strong></a>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [Introduction](#introduction)
+-   [Features](#features)
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Configuration](#configuration)
+-   [Contributing](#contributing)
+-   [License](#license)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Introduction
 
-## Learning Laravel
+Welcome to the **Notification Firebase Twilio Email Package**! This package provides a seamless way to send various types of notifications – such as text messages, SMS, and emails – to users through Firebase Cloud Messaging, Twilio SMS, and Laravel's built-in email capabilities. With this package, you can effortlessly engage with your users using their preferred communication channels.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Features
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   Send notifications using Firebase Cloud Messaging to reach users' mobile devices.
+-   Utilize Twilio SMS functionality to deliver short messages to users' phones.
+-   Leverage Laravel's native email support to send detailed notifications via email.
+-   Customize and configure your notifications to suit your application's needs.
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+To start using the **Notification Firebase Twilio Email Package**, follow these steps:
 
-### Premium Partners
+1. Install the package via Composer:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+    ```bash
+    composer require akshita/notification-firebase-twilio-email-package
+    ```
+
+2. In your Laravel project's `config/app.php`, add the service provider:
+
+```php
+'providers' => [
+    // ...
+    
+    Akshita\NotificationFirebaseTwilioEmailPackage\Providers\NotificationServiceProvider::class,
+],
+```
+
+## Usage
+
+Sending notifications is a breeze with the **Notification Firebase Twilio Email Package**. Here's how you can use it in your Laravel application:
+
+```php
+use Akshita\NotificationFirebaseTwilioEmailPackage\Notification;
+
+// Test this package by
+Notification::test();
+
+// Send a Firebase Cloud Messaging notification
+$recipient = 'user@example.com';
+$message = 'Hello from Firebase Cloud Messaging!';
+$result = Notification::sendFirebaseMessage($recipient, $message);
+if ($result) {
+    // Notification sent successfully.
+} else {
+    // Notification sending failed.
+}
+
+
+// Send a Twilio SMS notification
+$recipient = '+1234567890';
+$message = 'Hello from Twilio SMS!';
+Notification::sendTwilioSMS($recipient, $message);
+
+// Send an email notification
+$recipient = 'user@example.com';
+$subject = 'Important Update';
+$message = 'Hello from Email Notification!';
+Notification::sendEmail($recipient, $subject, $message);
+```
+
+## Configuration
+
+Configure your notification options by modifying the `config/notification.php` file in your Laravel app. Customize settings such as API credentials, sender information, and more to fit your needs.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Contributions are welcome! If you encounter issues or want to propose enhancements, please open an issue or submit a pull request on GitHub.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This package is open-source software licensed under the [MIT License](LICENSE.md).
