@@ -11,10 +11,10 @@ class NotificationServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/notification.php' => config_path('notification.php'),
+            __DIR__.'/notification.php' => config_path('notification.php'),
         ], 'notification-config');
     
-        $this->mergeConfigFrom(__DIR__.'/config/notification.php', 'notification');
+        $this->mergeConfigFrom(__DIR__.'/notification.php', 'notification');
     }
 
     public function register()
