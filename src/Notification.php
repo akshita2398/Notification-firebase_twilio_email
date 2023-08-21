@@ -3,6 +3,7 @@
 namespace Akshita\NotificationFirebaseTwilioEmailPackage;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class Notification
 {
@@ -29,6 +30,7 @@ class Notification
 
     public function sendNotification($recipientData, $action, $extra_data = null)
     {
+
         $content = config("notificationContent.{$action}");
 
         if ($content) {
@@ -41,38 +43,57 @@ class Notification
                     "body" => $content['body'],
                     "click_action" => $content['click_action'],
                 ];
-                $result['push_notification'] = ["status" => $this->sendFirebaseMessage($recipientData['firebase_token'], $data, $extra_data), "message" => "Firebase push Notification sent successfully."];
+
+                if ($recipientData['firebase_token'] != NULL) {
+                    $result['push_notification'] = ["status" => $this->sendFirebaseMessage($recipientData['firebase_token'], $data, $extra_data), "message" => "Firebase push Notification sent successfully."];
+                } else {
+                    $result['push_notification'] = ["status" => false, "message" => "Firebase push Notification not sent."];
+                }
             }
 
             // if need to send twilio message then message = true 
-            if ($content['SMS_message'] == true) {
+            if ($content['sms_message'] == true) {
                 $message_deiver = config('notification.message_deiver.notification_message_deiver');
-                $receiver = $recipientData['phone_number'];
-                switch ($message_deiver) {
-                    case 'twilio':
-                        $response = self::sendTwilioSMS($receiver, $content['sms_message_body']);
-                        break;
+                if ($recipientData['phone_number'] != NULL) {
+                    switch ($message_deiver) {
+                        case 'twilio':
+                            $response = self::sendTwilioSMS($recipientData['phone_number'], $content['sms_message_body']);
+                            break;
 
-                    case 'nexmo':
-                        $response = self::sendNexmoSMS($receiver, $content['sms_message_body']);
-                        break;
+                        case 'nexmo':
+                            $response = self::sendNexmoSMS($recipientData['phone_number'], $content['sms_message_body']);
+                            break;
 
-                    default:
-                        $result['SMS_message'] = ["status" => false, "message" => "Twilio message not sent."];
-                        break;
+                        default:
+                            $result['sms_message'] = ["status" => false, "message" => "Twilio message not sent."];
+                            break;
+                    }
+                    $result['sms_message'] = ["status" => $response, "message" => "SMS sent successfully."];
+
+                } else {
+                    $result['sms_message'] = ["status" => false, "message" => "Twilio message not sent."];
                 }
-                $result['SMS_message'] = ["status" => $response, "message" => "Firebase push Notification sent successfully."];
 
             }
 
             // if need to send emails then emails = true 
             if ($content['email'] == true) {
-                $result['email'] = ["status" => false, "message" => "email not sent."];
+                if ($recipientData['email'] != NULL) {
+                    
+                    self::sendEmail($recipientData['email'], $content, $extra_data,  $recipientData['email_template'] ?? NULL );
+
+                    $result['email'] = ["status" => true, "message" => "email sent sccessfully."];
+                } else {
+
+                    $result['email'] = ["status" => false, "message" => "email not sent."];
+                }
+
             }
 
         } else {
-            return ["status" => "false", "message" => "Notification content not found."];
+            $result = ["status" => "false", "message" => "Notification content not found."];
         }
+
 
         return ["status" => "true", "result" => $result];
     }
@@ -106,12 +127,12 @@ class Notification
     {
         $config = config('notification.twilio');
         try {
-            $response = Http::withBasicAuth($config['account_sid'] ,  $config['auth_token'] )
-            ->post("https://api.twilio.com/2010-04-01/Accounts/{$config['account_sid']}/Messages.json", [
-                'From' => $config['messaging_service_id'],
-                'To' => $receiver,
-                'Body' =>  $content,
-            ]);
+            $response = Http::withBasicAuth($config['account_sid'], $config['auth_token'])
+                ->asForm()->post("https://api.twilio.com/2010-04-01/Accounts/" . $config['account_sid'] . "/Messages.json", [
+                        'From' => $config['messaging_service_id'],
+                        'To' => $receiver,
+                        'Body' => $content,
+                    ]);
             $response = $response->successful();
         } catch (\Exception $exception) {
             $response = false;
@@ -125,10 +146,10 @@ class Notification
         $config = config('notification.nexmo');
         $response = Http::post("https://rest.nexmo.com/sms/json", [
             'api_key' => $config['api_key'],
-            'api_secret' =>  $config['api_secret'],
+            'api_secret' => $config['api_secret'],
             'from' => $config['from'],
-            'to' =>  $receiver,
-            'text' =>  $content,
+            'to' => $receiver,
+            'text' => $content,
         ]);
         $responseData = $response->json();
 
@@ -139,7 +160,27 @@ class Notification
             return false;
             // return response()->json(['message' => 'Failed to send SMS'], $response->status());
         }
-       
+
+    }
+
+    public static function sendEmail($receiver, $content, $extra_data,  $template)
+    {
+        $subject = $content['email_title'];
+        $message = $content['email_body'];
+
+        if ($template) {
+            Mail::send( $template , $extra_data, function ($message) use ($receiver, $subject) {
+                $message->to($receiver)->subject($subject);
+            });
+        } else {
+            Mail::raw($message, function ($message) use ($receiver, $subject) {
+                $message->to($receiver)->subject($subject);
+            });
+        }
+
+        return true;
+
+        // return "Email sent successfully!";
     }
 
 
