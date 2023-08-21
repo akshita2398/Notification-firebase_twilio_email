@@ -79,7 +79,7 @@ class Notification
             // if need to send emails then emails = true 
             if ($content['email'] == true) {
                 if ($recipientData['email'] != NULL) {
-                    
+
                     self::sendEmail($recipientData['email'], $content, $extra_data,  $recipientData['email_template'] ?? NULL );
 
                     $result['email'] = ["status" => true, "message" => "email sent sccessfully."];
@@ -123,6 +123,7 @@ class Notification
         return $response->successful();
     }
 
+   
     public static function sendTwilioSMS($receiver, $content)
     {
         $config = config('notification.twilio');
@@ -133,12 +134,21 @@ class Notification
                         'To' => $receiver,
                         'Body' => $content,
                     ]);
-            $response = $response->successful();
+
+            if($response->successful())
+            {
+                $result['sms_message'] = ["status" => $response->successful(), "message" => "SMS sent successfully."];
+            }else{
+                $result['sms_message'] = ["status" => $response->successful(), "message" =>  json_decode($response->body())->message];
+            }
+
+            // return  $result;
+
         } catch (\Exception $exception) {
             $response = false;
         }
 
-        return $response;
+        return $result;
     }
 
     public static function sendNexmoSMS($receiver, $content)
