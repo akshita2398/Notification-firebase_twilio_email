@@ -104,6 +104,12 @@ class Notification
 
         $data = [
             'registration_ids' => $recipient,
+            'notification' => [
+                "title" => $content['title'] ?? "New Message",
+                "body" => $content['body'] ?? "New Notification",
+                "click_action" => $content['click_action'] ?? "",
+                'values' => $extra_data
+            ],
             'data' => [
                 "title" => $content['title'] ?? "New Message",
                 "body" => $content['body'] ?? "New Notification",
