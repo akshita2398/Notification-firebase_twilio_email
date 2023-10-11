@@ -104,13 +104,15 @@ class Notification
 
         $extra_data["click_action"] = $content['click_action'] ?? "";
 
+        $extra_data = json_encode($extra_data);
+
         $data = [
             'registration_ids' => $recipient,
             'notification' => [
                 "title" => $content['title'] ?? "New Message",
                 "body" => $content['body'] ?? "New Notification"
             ],
-            'data' => json_encode($extra_data)
+            'data' => $extra_data
         ];
 
         $response = Http::withHeaders([
