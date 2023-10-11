@@ -110,7 +110,7 @@ class Notification
                 "title" => $content['title'] ?? "New Message",
                 "body" => $content['body'] ?? "New Notification"
             ],
-            'data' => $extra_data
+            'data' => json_encode($extra_data)
         ];
 
         $response = Http::withHeaders([
