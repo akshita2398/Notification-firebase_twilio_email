@@ -102,20 +102,15 @@ class Notification
     {
         $apiKey = config('notification.firebase.api_key');
 
+        $extra_data["click_action"] = $content['click_action'] ?? "";
+
         $data = [
             'registration_ids' => $recipient,
             'notification' => [
                 "title" => $content['title'] ?? "New Message",
-                "body" => $content['body'] ?? "New Notification",
-                "click_action" => $content['click_action'] ?? "",
-                'values' => json_encode($extra_data)
+                "body" => $content['body'] ?? "New Notification"
             ],
-            'data' => [
-                "title" => $content['title'] ?? "New Message",
-                "body" => $content['body'] ?? "New Notification",
-                "click_action" => $content['click_action'] ?? "",
-                'values' => json_encode($extra_data)
-            ]
+            'data' => $extra_data
         ];
 
         $response = Http::withHeaders([
