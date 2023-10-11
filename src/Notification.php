@@ -108,13 +108,13 @@ class Notification
                 "title" => $content['title'] ?? "New Message",
                 "body" => $content['body'] ?? "New Notification",
                 "click_action" => $content['click_action'] ?? "",
-                'values' => $extra_data
+                'values' => json_encode($extra_data)
             ],
             'data' => [
                 "title" => $content['title'] ?? "New Message",
                 "body" => $content['body'] ?? "New Notification",
                 "click_action" => $content['click_action'] ?? "",
-                'values' => $extra_data
+                'values' => json_encode($extra_data)
             ]
         ];
 
