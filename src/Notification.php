@@ -11,6 +11,22 @@ class Notification
     {
         return "Hi, This package is working. Use it for simplify and streamline sending notifications through Firebase Cloud Messaging, Twilio SMS, and Email.";
     }
+    
+        
+    function subscribeTokenToTopic($key, $token, $topic) {
+        $response = Http::withHeaders([
+            'Authorization' => 'key=' . $key,
+            'Content-Type: application/json',
+        ])->post('https://iid.googleapis.com/iid/v1/' . $token . '/rel/topics/' . $topic);
+
+        if($response->successful())
+        {
+            return ["status" => $response->successful(), "message" => 'Subscribed to "' . $topic . '"'];
+        }else{
+            return ["status" => $response->successful(), "message" =>  json_decode( $response->body() ) ];
+        }
+    }
+
 
     public function replace_veriables($content, $extra_data)
     {
