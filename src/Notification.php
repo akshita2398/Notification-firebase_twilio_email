@@ -104,7 +104,7 @@ class Notification
 
         $extra_data["click_action"] = $content['click_action'] ?? "";
 
-        $extra_data = json_encode($extra_data);
+        // $extra_data = json_encode($extra_data);
 
         $data = [
             'registration_ids' => $recipient,
