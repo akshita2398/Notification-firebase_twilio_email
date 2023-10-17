@@ -23,7 +23,6 @@
         "illuminate/support": "^8.0",
         "laravel/framework": "^8.0",
         "illuminate/notifications": "^8.0",
-        "kreait/laravel-firebase": "^4.2",
-        "edujugon/push-notification": "^5.3"
+        "kreait/laravel-firebase": "^4.2"
     }
 }
