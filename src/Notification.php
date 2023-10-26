@@ -2,6 +2,7 @@
 
 namespace Akshita\NotificationFirebaseTwilioEmailPackage;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -62,6 +63,16 @@ class Notification
 
                 if ($recipientData['firebase_token'] != NULL) {
                     $result['push_notification'] = ["status" => $this->sendFirebaseMessage($recipientData['firebase_token'], $data, $extra_data), "message" => "Firebase push Notification sent successfully."];
+                    
+                    if($content['push_notification_in_db']){
+                        DB::table('user_notifications')->insert([
+                            'data' => json_encode(['notification' => $data, 'extra_data' => $extra_data]),
+                            'user_id' =>  $extra_data["user_id"],
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
+                
                 } else {
                     $result['push_notification'] = ["status" => false, "message" => "Firebase push Notification not sent."];
                 }
