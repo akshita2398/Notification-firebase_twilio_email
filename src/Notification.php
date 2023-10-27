@@ -68,6 +68,7 @@ class Notification
                         DB::table('user_notifications')->insert([
                             'data' => json_encode(['notification' => $data, 'extra_data' => $extra_data]),
                             'user_id' =>  $extra_data["user_id"],
+                            'store_id' =>  $extra_data["store_id"],
                             'created_at' => now(),
                             'updated_at' => now()
                         ]);
